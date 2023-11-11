@@ -1,0 +1,32 @@
+#! /bin/bash
+
+usage () {
+    echo "usage: $(basename $0) [-f file] command" 1>&2
+    exit 255
+}
+
+list="list"
+
+while getopts 'f:' OPTION
+do
+    case $OPTION in
+    f) list="$OPTARG"
+       ;;
+    *) usage
+       ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+if [ $# -ne 1 ]; then
+    usage
+fi
+
+
+for i in $(egrep -v '^(#|$)' $list)
+do
+    ssh $i "$1"
+done
+
+exit 0

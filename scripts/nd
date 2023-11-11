@@ -1,0 +1,11 @@
+#! /bin/bash
+
+YYMMDD=$(date '+%Y%m%d')
+
+for i in `seq -w 00 99`
+do
+    if ! test -f $YYMMDD$i.txt; then
+        vim $YYMMDD$i.txt
+        exit 0
+    fi
+done

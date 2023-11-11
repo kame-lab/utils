@@ -1,0 +1,7 @@
+#! /bin/bash
+
+for i in 2*.txt
+do
+    echo -n "$i: "
+    head -1 $i
+done > list
