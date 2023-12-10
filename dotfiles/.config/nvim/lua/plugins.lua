@@ -65,9 +65,30 @@ require("mason").setup()
 require("mason-lspconfig").setup({
     ensure_installed = {
         "pyright",
+        "terraformls",
     },
 })
 
+require("mason-lspconfig").setup_handlers({
+  function()
+    require("lspconfig").terraformls.setup({
+      on_attach = function()
+          client.server_capabilities.document_formatting = false
+          client.server_capabilities.document_range_formatting = false
+      end,
+      root_dir = function(dirpath)
+        return require("lspconfig").util.root_pattern(".terraform", ".git")(dirpath) or require("lspconfig").util.path.dirname(dirpath)
+      end,
+      capabilities = require("cmp_nvim_lsp").default_capabilities(),
+      filetypes = {
+        "terraform",
+        "tf",
+      }
+    })
+  end,
+})
+
+vim.cmd("autocmd BufNewFile,BufRead *.tf set filetype=terraform")
 
 -------------------------------------------------------------------------------
 -- nvim-lspconfig
